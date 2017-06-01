@@ -1,0 +1,83 @@
+<div class="container" style="margin-top:50px">
+  <form action="/post_write" method="POST">
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" class="form-control" name="view_post_title" placeholder="제목을 입력하세요">
+    </div>
+    
+    <div class="form-group">
+      <label>Content</label>
+      <textarea type="text" class="form-control" name="view_post_content" placeholder="내용을 입력하세요" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-default btn-lg btn-block">Write</button>
+  </form>
+  
+  <br/><br/>
+  
+  <table class="table table-hover">
+    <thead>
+       <tr>
+         <th> # </th>
+        <th> Title </th>
+        <th> content </th>
+        <th> Date </th>
+        <th> Comment </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @posts.each do |p| %>
+      <tr>
+          <td> <%=p.id%> </td>
+          <td> <%= p.post_title %> </td>
+          <td> <%= p.post_content %> </td>
+          <td> <%= date_field(:user, :born_on) %> </td>
+          <td>
+            <div id="comment_<%= p.id %>">
+              <% p.comments.each do |r| %>
+                  <%= r.comment_content %>
+                  <%= r.post_id %><br>
+              <%end%>
+            </div>
+            <div class="form-group">
+              <label>Comment</label>
+              <input type="text" class="form-control" id="content_<%=p.id%>" name="view_comment_content" placeholder="댓글을 입력하세요">
+            </div>
+            <button value="<%=p.id%>" type="submit" class="btn btn-default comment_submit">Comment Write</button>
+          </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+  
+  
+<!--<script>
+  $(function() 
+    {
+      $(".comment_submit").click(function(){
+      
+        post_id = this.value; // 2
+        post_content = $("#content_" + post_id).val(); // content_2
+        
+          
+        $.ajax({
+          
+          method: "POST",
+          url: "/comment_write",
+          data: { view_comment_content: post_content, view_post_id: post_id },
+          
+          success: function(){
+            $("#comment_" + post_id).append("<p>" + post_content + "</p>");
+            $("#content_" + post_id).val('');
+          },
+          
+          error: function(){
+            alert("리플이 작성되지 않았습니다.")
+          }
+        })
+      });
+    }
+  );
+</script>-->
